@@ -6,6 +6,7 @@
 // ========== Declare SV functions that C will call ==========
 extern int sv_multiply(int a, int b);
 extern void sv_display(const char* msg);
+extern void sv_wait_cycles(int cycles);  // SV task declaration
 
 // ========== C functions for SV to call ==========
 
@@ -34,6 +35,22 @@ int c_callback_test(int value) {
     sv_display("Hello from C code!");
     
     return result + 100;
+}
+
+// C 调用 SV task 的测试函数
+void c_test_task_call() {
+    printf("[C] c_test_task_call: Before calling sv_wait_cycles\n");
+    
+    // C 调用 SV task，这个 task 会等待 5 个时钟周期
+    sv_wait_cycles(5);
+    
+    printf("[C] c_test_task_call: After sv_wait_cycles completed\n");
+    
+    // 再等待 3 个周期
+    printf("[C] c_test_task_call: Calling sv_wait_cycles again for 3 cycles\n");
+    sv_wait_cycles(3);
+    
+    printf("[C] c_test_task_call: All waits completed!\n");
 }
 
 // 可选：DPI 初始化函数
